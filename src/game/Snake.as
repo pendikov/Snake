@@ -8,7 +8,9 @@ package game
 	{
 		public static const HIT_WALL:String = "hitWall";
 		public static const TOUCH_FOOD:String = "touchFood";
-		private var _speed:Number = 10;
+		public var speed:Number = 10;
+		
+		//public function set speed(value:Number):void{_speed = value; }
 		private var _elements:Array = [];
 		
 		public var isMovingLeft:Boolean = false;
@@ -26,33 +28,37 @@ package game
 		}		
 		
 		public function moveRight(e:TimerEvent):void{
-			if (this.x <stage.stageWidth - this.width - _speed){
-				isMovingRight = true;
-				this.x += _speed;
+			if (this.x <stage.stageWidth - this.width - speed){
+				isMovingRight = true;				
+				takePlaceOfPrevious();
+				_elements[0].x += speed;
 			}				
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveLeft(e:TimerEvent):void{
-			if (this.x > _speed){
+			if (this.x > speed){
 				isMovingLeft = true;
-				this.x -= _speed;
+				takePlaceOfPrevious();
+				_elements[0].x -= speed;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveUp(e:TimerEvent):void{
-			if (this.y > _speed){
-				isMovingUp = true;
-				this.y -= _speed;
+			if (this.y > speed){
+				isMovingUp = true;				
+				takePlaceOfPrevious();
+				_elements[0].y -= speed;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveDown(e:TimerEvent):void{
-			if (this.y <stage.stageHeight - this.height -  _speed){
-				isMovingDown = true;
-				this.y += _speed;
+			if (this.y <stage.stageHeight - this.height -  speed){
+				isMovingDown = true;				
+				takePlaceOfPrevious();
+				_elements[0].y += speed;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
@@ -63,9 +69,15 @@ package game
 		private function eatFood(e:Event):void{
 			trace("numnum");
 			var food:Food = new Food();
-			food.x = _elements[_elements.length-1].x + 10;
+
 			_elements.push(food);
 			addChild(food);
+		}
+		private function takePlaceOfPrevious():void{
+			for (var i:uint=_elements.length-1; i>0; i--){
+				_elements[i].x = _elements[i-1].x;
+				_elements[i].y = _elements[i-1].y;
+			}
 		}
 	}
 }

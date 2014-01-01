@@ -27,6 +27,10 @@ package game
 		}
 		private function onAddedToStage(e:Event):void{
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		private function onKeyUp(e:KeyboardEvent):void{
+			_snake.speed = 10;
 		}
 		private function onKeyDown(e:KeyboardEvent):void{
 			trace(e.keyCode);
@@ -40,6 +44,8 @@ package game
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveLeft);	
 					}
+					if(_snake.isMovingLeft)
+						_snake.speed +=1;
 					break;
 				case 38:
 					if (!_snake.isMovingDown){
@@ -50,6 +56,8 @@ package game
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveUp);
 					}
+					if(_snake.isMovingUp)
+						_snake.speed +=1;
 					break;
 				case 39:
 					if (!_snake.isMovingLeft){
@@ -60,6 +68,8 @@ package game
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveRight);	
 					}
+					if(_snake.isMovingRight)
+						_snake.speed +=1;
 					break;
 				case 40:
 					if (!_snake.isMovingUp){
@@ -70,6 +80,8 @@ package game
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveDown);	
 					}
+					if(_snake.isMovingDown)
+						_snake.speed +=1;
 					break;
 				default:
 					trace(e.keyCode);
