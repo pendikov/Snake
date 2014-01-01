@@ -8,6 +8,8 @@ package game
 		private var _snake:Snake;
 		public function Game()
 		{
+			this.x = 0;
+			this.y = 0;
 			_foodGenerator = new FoodGenerator();
 			_snake = new Snake();
 			addChild(_snake);
