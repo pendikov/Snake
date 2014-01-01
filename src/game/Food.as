@@ -4,10 +4,10 @@ package game
 
 	public class Food extends Sprite
 	{
-		public function Food(x:Number, y:Number)
+		public function Food()
 		{
 			this.graphics.beginFill(0xffff00);
-			this.graphics.drawRect(x, y, 10, 10);
+			this.graphics.drawRect(0, 0, 10, 10);
 			this.graphics.endFill();
 		}
 	}

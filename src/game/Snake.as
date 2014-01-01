@@ -2,79 +2,53 @@ package game
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 
 	public class Snake extends Sprite
 	{
+		public static const HIT_WALL:String = "hitWall";
+		public static const TOUCH_FOOD:String = "touchFood";
 		private var _speed:Number = 10;
 		private var _elements:Array = [];
-		private var _timer:Timer;
+		
 		public function Snake()
 		{
 			this.x = 195;
 			this.y = 195;
-			_elements.push(new Food(0, 0));
-			addChild(_elements[0]);
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			_timer = new Timer(250, 0);
-		}
-		private function onAddedToStage(e:Event):void{
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		}
-		private function onKeyDown(e:KeyboardEvent):void{
-			trace(e.keyCode);
-			switch (e.keyCode){
-				case 37:
-					_timer.removeEventListener(TimerEvent.TIMER, moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, moveUp);
-					_timer.removeEventListener(TimerEvent.TIMER, moveDown);
-					_timer.addEventListener(TimerEvent.TIMER, moveLeft);					
-					_timer.start();					
-					break;
-				case 38:
-					_timer.removeEventListener(TimerEvent.TIMER, moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, moveLeft);					
-					_timer.removeEventListener(TimerEvent.TIMER, moveDown);
-					_timer.addEventListener(TimerEvent.TIMER, moveUp);
-					_timer.start();	
-					break;
-				case 39:
-					_timer.removeEventListener(TimerEvent.TIMER, moveUp);
-					_timer.removeEventListener(TimerEvent.TIMER, moveDown);
-					_timer.removeEventListener(TimerEvent.TIMER, moveLeft);
-					_timer.addEventListener(TimerEvent.TIMER, moveRight);
-					_timer.start();					
-					break;
-				case 40:
-					_timer.removeEventListener(TimerEvent.TIMER, moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, moveLeft);
-					_timer.removeEventListener(TimerEvent.TIMER, moveUp);
-					_timer.addEventListener(TimerEvent.TIMER, moveDown);
-					_timer.start();	
-					break;
-				default:
-					trace(e.keyCode);
-					break;
-			}
-		}
-		private function moveRight(e:TimerEvent):void{
-			//trace(this.width);
+			_elements.push(new Food());
+			addChild(_elements[0]);	
+			this.addEventListener(TOUCH_FOOD, eatFood);
+		}		
+		
+		public function moveRight(e:TimerEvent):void{
 			if (this.x <stage.stageWidth - this.width - _speed)
 				this.x += _speed;
+			else 
+				this.dispatchEvent(new Event(HIT_WALL));
 		}
-		private function moveLeft(e:TimerEvent):void{
+		public function moveLeft(e:TimerEvent):void{
 			if (this.x > _speed)
 				this.x -= _speed;
+			else 
+				this.dispatchEvent(new Event(HIT_WALL));
 		}
-		private function moveUp(e:TimerEvent):void{
+		public function moveUp(e:TimerEvent):void{
 			if (this.y > _speed)
 				this.y -= _speed;
+			else 
+				this.dispatchEvent(new Event(HIT_WALL));
 		}
-		private function moveDown(e:TimerEvent):void{
+		public function moveDown(e:TimerEvent):void{
 			if (this.y <stage.stageHeight - this.height -  _speed)
 				this.y += _speed;
+			else 
+				this.dispatchEvent(new Event(HIT_WALL));
+		}
+		public function get head():Food{
+			return _elements[0];
+		}
+		private function eatFood(e:Event):void{
+			trace("numnum");
 		}
 	}
 }
