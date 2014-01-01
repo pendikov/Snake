@@ -11,6 +11,11 @@ package game
 		private var _speed:Number = 10;
 		private var _elements:Array = [];
 		
+		public var isMovingLeft:Boolean = false;
+		public var isMovingRight:Boolean = false;
+		public var isMovingUp:Boolean = false;
+		public var isMovingDown:Boolean = false;
+		
 		public function Snake()
 		{
 			this.x = 195;
@@ -21,26 +26,34 @@ package game
 		}		
 		
 		public function moveRight(e:TimerEvent):void{
-			if (this.x <stage.stageWidth - this.width - _speed)
+			if (this.x <stage.stageWidth - this.width - _speed){
+				isMovingRight = true;
 				this.x += _speed;
+			}				
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveLeft(e:TimerEvent):void{
-			if (this.x > _speed)
+			if (this.x > _speed){
+				isMovingLeft = true;
 				this.x -= _speed;
+			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveUp(e:TimerEvent):void{
-			if (this.y > _speed)
+			if (this.y > _speed){
+				isMovingUp = true;
 				this.y -= _speed;
+			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
 		public function moveDown(e:TimerEvent):void{
-			if (this.y <stage.stageHeight - this.height -  _speed)
+			if (this.y <stage.stageHeight - this.height -  _speed){
+				isMovingDown = true;
 				this.y += _speed;
+			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
 		}
@@ -49,6 +62,10 @@ package game
 		}
 		private function eatFood(e:Event):void{
 			trace("numnum");
+			var food:Food = new Food();
+			food.x = _elements[_elements.length-1].x + 10;
+			_elements.push(food);
+			addChild(food);
 		}
 	}
 }

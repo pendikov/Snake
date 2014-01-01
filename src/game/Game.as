@@ -32,28 +32,44 @@ package game
 			trace(e.keyCode);
 			switch (e.keyCode){
 				case 37:
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
-					_timer.addEventListener(TimerEvent.TIMER, _snake.moveLeft);									
+					if (!_snake.isMovingRight){
+						_snake.isMovingUp = false;
+						_snake.isMovingDown = false;
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
+						_timer.addEventListener(TimerEvent.TIMER, _snake.moveLeft);	
+					}
 					break;
 				case 38:
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);					
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
-					_timer.addEventListener(TimerEvent.TIMER, _snake.moveUp);
+					if (!_snake.isMovingDown){
+						_snake.isMovingLeft = false;
+						_snake.isMovingRight = false;
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);					
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
+						_timer.addEventListener(TimerEvent.TIMER, _snake.moveUp);
+					}
 					break;
 				case 39:
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);
-					_timer.addEventListener(TimerEvent.TIMER, _snake.moveRight);				
+					if (!_snake.isMovingLeft){
+						_snake.isMovingUp = false;
+						_snake.isMovingDown = false;
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveDown);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);
+						_timer.addEventListener(TimerEvent.TIMER, _snake.moveRight);	
+					}
 					break;
 				case 40:
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);
-					_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
-					_timer.addEventListener(TimerEvent.TIMER, _snake.moveDown);	
+					if (!_snake.isMovingUp){
+						_snake.isMovingLeft = false;
+						_snake.isMovingRight = false;
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveLeft);
+						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
+						_timer.addEventListener(TimerEvent.TIMER, _snake.moveDown);	
+					}
 					break;
 				default:
 					trace(e.keyCode);
