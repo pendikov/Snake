@@ -18,6 +18,8 @@ package game
 		public var isMovingUp:Boolean = false;
 		public var isMovingDown:Boolean = false;
 		
+		public var acceleration:Number = 0;
+		
 		public function Snake()
 		{
 			this.x = 195;
@@ -25,13 +27,14 @@ package game
 			_elements.push(new Food());
 			addChild(_elements[0]);	
 			this.addEventListener(TOUCH_FOOD, eatFood);
+			this.addEventListener(HIT_WALL, onHitWal);
 		}		
 		
 		public function moveRight(e:TimerEvent):void{
 			if (this.x <stage.stageWidth - this.width - speed){
 				isMovingRight = true;				
 				takePlaceOfPrevious();
-				_elements[0].x += speed;
+				_elements[0].x = _elements[0].x + speed + acceleration;
 			}				
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
@@ -40,7 +43,7 @@ package game
 			if (this.x > speed){
 				isMovingLeft = true;
 				takePlaceOfPrevious();
-				_elements[0].x -= speed;
+				_elements[0].x = _elements[0].x - speed + acceleration;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
@@ -49,7 +52,7 @@ package game
 			if (this.y > speed){
 				isMovingUp = true;				
 				takePlaceOfPrevious();
-				_elements[0].y -= speed;
+				_elements[0].y = _elements[0].y - speed + acceleration;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
@@ -58,7 +61,7 @@ package game
 			if (this.y <stage.stageHeight - this.height -  speed){
 				isMovingDown = true;				
 				takePlaceOfPrevious();
-				_elements[0].y += speed;
+				_elements[0].y = _elements[0].y+ speed + acceleration;
 			}
 			else 
 				this.dispatchEvent(new Event(HIT_WALL));
@@ -75,9 +78,18 @@ package game
 		}
 		private function takePlaceOfPrevious():void{
 			for (var i:uint=_elements.length-1; i>0; i--){
-				_elements[i].x = _elements[i-1].x;
-				_elements[i].y = _elements[i-1].y;
+				if(isMovingUp || isMovingDown){
+					_elements[i].y = _elements[i-1].y + acceleration;
+					_elements[i].x = _elements[i-1].x
+				} else if(isMovingLeft || isMovingRight){
+					_elements[i].x = _elements[i-1].x + acceleration;
+					_elements[i].y = _elements[i-1].y;
+				}
+				
 			}
+		}
+		private function onHitWal(e:Event):void{
+			trace(HIT_WALL);
 		}
 	}
 }

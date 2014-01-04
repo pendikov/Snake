@@ -8,7 +8,6 @@ package game
 
 	public class Game extends Sprite
 	{
-		private var _foodGenerator:FoodGenerator;
 		private var _snake:Snake;
 		private var _timer:Timer;
 		private var _food:Food;
@@ -18,8 +17,9 @@ package game
 			this.y = 0;
 			_snake = new Snake();
 			addChild(_snake);		
-			_foodGenerator = new FoodGenerator();
-			makeFood();
+			_food = new Food();
+			placeFood();
+			addChild(_food);
 			_timer = new Timer(250, 0);
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			_timer.addEventListener(TimerEvent.TIMER, timerHandler);
@@ -31,12 +31,14 @@ package game
 		}
 		private function onKeyUp(e:KeyboardEvent):void{
 			_snake.speed = 10;
+			_snake.acceleration = 0;
 		}
 		private function onKeyDown(e:KeyboardEvent):void{
-			trace(e.keyCode);
+			trace(_snake.acceleration);
 			switch (e.keyCode){
 				case 37:
 					if (!_snake.isMovingRight){
+						_snake.acceleration = -Math.abs(_snake.acceleration);
 						_snake.isMovingUp = false;
 						_snake.isMovingDown = false;
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
@@ -45,10 +47,12 @@ package game
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveLeft);	
 					}
 					if(_snake.isMovingLeft)
-						_snake.speed +=1;
+						_snake.acceleration -=10;
 					break;
 				case 38:
 					if (!_snake.isMovingDown){
+						_snake.acceleration = -Math.abs(_snake.acceleration);
+						//trace(_snake.acceleration);
 						_snake.isMovingLeft = false;
 						_snake.isMovingRight = false;
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
@@ -57,10 +61,11 @@ package game
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveUp);
 					}
 					if(_snake.isMovingUp)
-						_snake.speed +=1;
+						_snake.acceleration -=10;
 					break;
 				case 39:
 					if (!_snake.isMovingLeft){
+						Math.abs(_snake.acceleration);
 						_snake.isMovingUp = false;
 						_snake.isMovingDown = false;
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveUp);
@@ -69,10 +74,11 @@ package game
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveRight);	
 					}
 					if(_snake.isMovingRight)
-						_snake.speed +=1;
+						_snake.acceleration +=10;
 					break;
 				case 40:
 					if (!_snake.isMovingUp){
+						Math.abs(_snake.acceleration);
 						_snake.isMovingLeft = false;
 						_snake.isMovingRight = false;
 						_timer.removeEventListener(TimerEvent.TIMER, _snake.moveRight);
@@ -81,7 +87,7 @@ package game
 						_timer.addEventListener(TimerEvent.TIMER, _snake.moveDown);	
 					}
 					if(_snake.isMovingDown)
-						_snake.speed +=1;
+						_snake.acceleration +=10;
 					break;
 				default:
 					trace(e.keyCode);
@@ -91,13 +97,13 @@ package game
 		private function timerHandler(e:TimerEvent):void{
 			if (_snake.head.hitTestPoint(_food.x+5, _food.y+5)){
 				_snake.dispatchEvent(new Event(Snake.TOUCH_FOOD));
-				removeChild(_food);
-				makeFood();
+				placeFood();
 			}
 		}
-		private function makeFood():void{
-			_food = _foodGenerator.makeFood();
-			addChild(_food);
+		private function placeFood():void{
+			_food.x = GameMath.randomCoordinate();
+			_food.y = GameMath.randomCoordinate();
 		}
+		
 	}
 }
